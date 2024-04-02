@@ -27,6 +27,8 @@ public class SearchService {
     List<User> filteredUsers = new ArrayList<User>();
     List<Variety> filteredVarieties = new ArrayList<Variety>();
 
+//_____________________________________________________________________________________________________SEARCHES
+//_____________________________________________________________________________________________________
 
     //remove extra parts from the search term and capitalize it to make it easier to search with
     public String removeExtraChars(String string){
@@ -125,9 +127,31 @@ public class SearchService {
         }
         return filteredUsers;
     }
+//_____________________________________________________________________________________________________ END SEARCHES
+//_____________________________________________________________________________________________________
+
+//_____________________________________________________________________________________________________ SORTING
+//_____________________________________________________________________________________________________
+
+    public List<Listing> sortListingsByDistance(){
+        if (filteredListings.isEmpty()){
+            filteredListings = listingRepository.findAll();
+        }
+
+        //code here to filter listings by distance:
+        //get current user's latitude and longitude
+        //loop through each listing
+        //get listing.user.latitude and listing.user.longitude
+        //do math to find the distance between the two (look up? minus each and convert any negatives to positives? Then add them together and divide by 2)
+        //set a relative distance field in user?
+            //have a check, if user id matches previously calculated users, just use the already mad relative distance filed
+        //sort by relative distance (maybe have a separate method that can switch ascending/descending by reversing the order of sorting)
+
+        return filteredListings;
+    }
 
 
-
+//_____________________________________________________________________________________________________ END SORTING
 
     //controller will pick which search method to call based on inputs selected in the view and pass in the search term
     //method will return a List<> of listings or users or varieties
