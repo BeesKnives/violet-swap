@@ -36,6 +36,7 @@ public class User extends AbstractEntity {
 
     private Double latitude;
     private Double longitude;
+    private Double distance = null; //used for relative distance between user and other users in SearchService
 
     @OneToMany (mappedBy = "user")
     private final List<Listing> listings = new ArrayList<>();
@@ -124,6 +125,12 @@ public class User extends AbstractEntity {
     }
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+    public Double getDistance() {
+        return distance;
+    }
+    public void setDistance(Double distance) {
+        this.distance = distance;
     }
 
     public List<Listing> getListings() {
