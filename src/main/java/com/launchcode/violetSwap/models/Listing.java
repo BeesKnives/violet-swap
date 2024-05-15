@@ -12,7 +12,7 @@ public class Listing extends AbstractEntity implements Comparable<Listing>{
     private Variety variety;
 
     @ManyToOne
-    private static User user;
+    private User user;
 
     public String getImagePath() {
         return imagePath;
@@ -60,7 +60,7 @@ public class Listing extends AbstractEntity implements Comparable<Listing>{
     //getters and setters
 
 
-    public static User getUser() {
+    public User getUser() {
         return user;
     }
 

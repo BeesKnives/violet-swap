@@ -155,18 +155,21 @@ public class SearchService {
 
 
         for ( Listing listing : filteredListings ) { //for each listing in filteredListings
-            if(listing.getUser().getDistance().equals(null)){ //check if the listing's user's distance has already been calculated
+            System.out.println("user: " + listing.getUser());
+            System.out.println("current distance: " + listing.getUser().getDistance());
+            if(listing.getUser().getDistance()==(null)){ //check if the listing's user's distance has already been calculated.
                 //calculate distance between user and the other users:
                 Double listingLatitude = listing.getUser().getLatitude(); //get lat/long of listing
                 Double listingLongitude = listing.getUser().getLongitude();
 
-                Double relativeLatitude = Math.abs(userLatitude - listingLatitude); //get distance between lat/long
-                Double relativeLongitude = Math.abs(userLongitude - listingLongitude);
+                Double distanceLatitude = Math.abs(userLatitude - listingLatitude); //get distance between lat/long
+                Double distanceLongitude = Math.abs(userLongitude - listingLongitude);
 
-                Double distance = Math.abs(relativeLatitude - relativeLongitude);
+                Double distance = (distanceLatitude + distanceLongitude) / 2; //calculate overall distance
 
                 listing.getUser().setDistance(distance); //set distance in User
             }
+            System.out.println("calculated distance: " + listing.getUser().getDistance() + "\n");
         }
         //once distance between user and other users has been calculated,
 
