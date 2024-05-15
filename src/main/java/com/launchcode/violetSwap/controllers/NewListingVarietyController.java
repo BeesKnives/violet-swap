@@ -126,19 +126,19 @@ public class NewListingVarietyController {
         return "redirect:/user/new-listing";
     }
     //________________________________________________________________________________________________
-//____________________________________________________________________________________________________show listings
-
-
-    @GetMapping("/listings")
-    public String displayListings(Model model, HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        Integer userId = (Integer) session.getAttribute("user");
-        List<Listing> listings = listingRepository.findAll();
-        model.addAttribute("userId", userId);
-        model.addAttribute("maturityLevels", Maturity.values());
-        model.addAttribute("listings", listings);
-        return "search/listings";
-    }
+////____________________________________________________________________________________________________show listings
+//
+//
+//    @GetMapping("/listings")
+//    public String displayListings(Model model, HttpServletRequest request) {
+//        HttpSession session = request.getSession();
+//        Integer userId = (Integer) session.getAttribute("user");
+//        List<Listing> listings = listingRepository.findAll();
+//        model.addAttribute("userId", userId);
+//        model.addAttribute("maturityLevels", Maturity.values());
+//        model.addAttribute("listings", listings);
+//        return "search/listings";
+//    }
 
 
     //_______________________________________________________________________________________________update listings
