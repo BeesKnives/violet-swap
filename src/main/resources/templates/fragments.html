@@ -66,6 +66,7 @@
                 <div>
                     <label>User:</label>
                     <label th:text="${listing.user.username}"></label>
+                    <label th:if="${listing.user.distance != null}" th:text="Distance: ${listing.user.distance}"></label>
                 </div>
             </td>
             <td width="50">

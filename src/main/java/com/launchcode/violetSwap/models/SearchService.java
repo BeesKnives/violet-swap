@@ -138,6 +138,7 @@ public class SearchService {
 //_____________________________________________________________________________________________________ SORTING
 //_____________________________________________________________________________________________________
 
+    //sort listings by distance ascending
     public List<Listing> sortListingsByDistance(HttpServletRequest request){
         if (filteredListings.isEmpty()){
             filteredListings = listingRepository.findAll();
@@ -196,6 +197,14 @@ public class SearchService {
         return filteredListings;
     }
 
+    //sort listings by distance descending
+    public List<Listing> ReverseSortListingsByDistance(HttpServletRequest request) {
+
+        sortListingsByDistance(request);
+        Collections.reverse(filteredListings);
+
+        return filteredListings;
+    }
 
 //_____________________________________________________________________________________________________ END SORTING
 

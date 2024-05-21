@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.launchcode.violetSwap.models.data.VarietyRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 //connects to search/varieties, and search/variety/{id}
 @Controller
@@ -101,9 +102,32 @@ public class SearchController {
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("user");
         List<Listing> listings = listingRepository.findAll();
+
         model.addAttribute("userId", userId);
-        model.addAttribute("maturityLevels", Maturity.values());
+        //model.addAttribute("maturityLevels", Maturity.values());
         model.addAttribute("listings", listings);
+
+
+        //List<String> sortBy = List.of("Distance", "Recent(not currently active)");
+
+        //model.addAttribute("sortBy", sortBy);
+        return "search/listings";
+    }
+
+    @PostMapping("/listings")
+    public String handleDisplaySortedListings(Model model, HttpServletRequest request, @RequestParam String sortBy){
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("user");
+        model.addAttribute("userId", userId);
+
+
+        if (Objects.equals(sortBy, "distanceAscending")){
+            searchService.sortListingsByDistance(request);
+        } else if (Objects.equals(sortBy, "distanceDescending")){
+            searchService.ReverseSortListingsByDistance(request);
+        }
+
+
         return "search/listings";
     }
 
