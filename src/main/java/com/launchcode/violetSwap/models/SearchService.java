@@ -148,7 +148,13 @@ public class SearchService {
         //get current user's latitude and longitude
         
         User user = userService.getUserFromSession(request.getSession()); //get user from session
+
+        //user.getLatitude() is getting null. user and user.getId() are working fine though. Check MySQL
+        //todo: when a user is made with oauth, it's not automatically adding on the latitude/longitude. make sure that extra page where you add zipcode and email calls ZipcodeDataService and does the thing.
+
+
         Double userLatitude = user.getLatitude(); //get lat/long of user
+        System.out.println(userLatitude + "_______________________________________________________________");
         Double userLongitude = user.getLongitude();
 
 

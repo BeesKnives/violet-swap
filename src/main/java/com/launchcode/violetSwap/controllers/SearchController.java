@@ -120,6 +120,9 @@ public class SearchController {
         Integer userId = (Integer) session.getAttribute("user");
         model.addAttribute("userId", userId);
 
+//        if (user == null){
+//            return "redirect:/user/update";
+//        }
 
         if (Objects.equals(sortBy, "distanceAscending")){
             searchService.sortListingsByDistance(request);
