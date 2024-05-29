@@ -32,7 +32,7 @@
             <a class="navlink" th:href="@{/user/home.html}">Home</a>
             <a class="navlink" th:href="@{/user/myDetails}">Account</a>
             <a class="navlink" th:href="@{/user/new-listing}">Add Listing</a>
-            <a class="navlink" th:href="@{/user/listings}">View All Listings</a>
+            <a class="navlink" th:href="@{/search/listings}">View All Listings</a>
             <a class="navlink" th:href="@{/search/varieties}">Browse Varieties</a>
         </th:block>
     </div>
@@ -60,8 +60,13 @@
                     <label th:text="${listing.maturity.type}"></label>
                 </div>
                 <div>
-                    <label th:for="maturity">Details:</label>
+                    <label th:for="description">Details:</label>
                     <label th:text="${listing.description}"></label>
+                </div>
+                <div>
+                    <label>User:</label>
+                    <label th:text="${listing.user.username}"></label>
+                    <label th:if="${listing.user.distance != null}" th:text="Distance: ${listing.user.distance}"></label>
                 </div>
             </td>
             <td width="50">

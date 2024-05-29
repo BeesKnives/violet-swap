@@ -4,7 +4,24 @@
 <body  style="background-color: #008080">
 
 <h1>Listings</h1>
+
+<form method="post">
+    <div class="form-group">
+        <label>Sort By: </label>
+        <select id="sortBy" name="sortBy">
+            <option value="distanceAscending">Distance from User (Ascending)</option>
+            <option value="distanceDescending">Distance from User (Descending)</option>
+        </select>
+        <!-- Include CSRF token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="submit" value="Submit" />
+    </div>
+
+</form>
+
+
 <div th:replace="fragments :: showListings"></div>
+
 
 </body>
 </html>

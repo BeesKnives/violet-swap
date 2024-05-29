@@ -1,7 +1,10 @@
 package com.launchcode.violetSwap.controllers;
 
+import com.launchcode.violetSwap.models.Listing;
+import com.launchcode.violetSwap.models.Maturity;
 import com.launchcode.violetSwap.models.SearchService;
 import com.launchcode.violetSwap.models.Variety;
+import com.launchcode.violetSwap.models.data.ListingRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import com.launchcode.violetSwap.models.data.VarietyRepository;
 
 import java.util.List;
+import java.util.Objects;
 
 //connects to search/varieties, and search/variety/{id}
 @Controller
@@ -21,8 +25,11 @@ public class SearchController {
     private VarietyRepository varietyRepository;
     @Autowired
     private SearchService searchService; //instance of searchService, so we can call search methods
+    @Autowired
+    private ListingRepository listingRepository;
 
-
+//______________________________________________________________________________________________SEARCH BY VARIETY
+//_______________________________________________________________________________________________________________
 
 
     @GetMapping("/varieties")//_________________________________________________Browse All Varieties and can search
@@ -84,7 +91,48 @@ public class SearchController {
     }
 
 
+//__________________________________________________________________________________________________SEARCH BY LISTING
+//_______________________________________________________________________________________________________________
 
+    //____________________________________________________________________________________________________show listings
+
+
+    @GetMapping("/listings")
+    public String displayListings(Model model, HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("user");
+        List<Listing> listings = listingRepository.findAll();
+
+        model.addAttribute("userId", userId);
+        //model.addAttribute("maturityLevels", Maturity.values());
+        model.addAttribute("listings", listings);
+
+
+        //List<String> sortBy = List.of("Distance", "Recent(not currently active)");
+
+        //model.addAttribute("sortBy", sortBy);
+        return "search/listings";
+    }
+
+    @PostMapping("/listings")
+    public String handleDisplaySortedListings(Model model, HttpServletRequest request, @RequestParam String sortBy){
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("user");
+        model.addAttribute("userId", userId);
+
+//        if (user == null){
+//            return "redirect:/user/update";
+//        }
+
+        if (Objects.equals(sortBy, "distanceAscending")){
+            searchService.sortListingsByDistance(request);
+        } else if (Objects.equals(sortBy, "distanceDescending")){
+            searchService.ReverseSortListingsByDistance(request);
+        }
+
+
+        return "search/listings";
+    }
 
 
 }

@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "listing")
-public class Listing extends AbstractEntity {
+public class Listing extends AbstractEntity implements Comparable<Listing>{
 
     @ManyToOne
     private Variety variety;
@@ -30,6 +30,9 @@ public class Listing extends AbstractEntity {
     @Column(length = 1000)
     private String imagePath;
 
+
+
+
     //constructors
     public Listing() {
 
@@ -41,6 +44,16 @@ public class Listing extends AbstractEntity {
         this.maturity = maturity;
         this.description = description;
     }
+
+
+    //override the compareTo method of Comparable class, will be used in SearchService for sorting
+    @Override public int compareTo(Listing otherListing){
+
+        Double compareDistance = this.getUser().getDistance() - otherListing.getUser().getDistance(); //comparing listing's user's distances
+
+        return (int)Math.round(compareDistance); //convert Double to int
+    }
+
 
 
 
