@@ -162,9 +162,11 @@ public class SearchService {
 
 
         for ( Listing listing : filteredListings ) { //for each listing in filteredListings
-            System.out.println("user: " + listing.getUser());
-            System.out.println("current distance: " + listing.getUser().getDistance());
+
             if(listing.getUser().getDistance()==(null)){ //check if the listing's user's distance has already been calculated.
+
+
+
                 //calculate distance between user and the other users:
                 Double listingLatitude = listing.getUser().getLatitude(); //get lat/long of listing
                 Double listingLongitude = listing.getUser().getLongitude();
@@ -172,11 +174,46 @@ public class SearchService {
                 Double distanceLatitude = Math.abs(userLatitude - listingLatitude); //get distance between lat/long
                 Double distanceLongitude = Math.abs(userLongitude - listingLongitude);
 
+
+
+
+
+                //todo: look into doing a more in-depth calculation with the earth as a sphere
+                // instead of working in 2D? https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+
+
+
+                //todo: let's set this up correctly.
+                //todo: find the distance of the longitude using the latitude and cosine
+                //The equation for calculating the number of miles that
+                // each degree of longitude represents at any given latitude is:
+                // miles = cosine (degrees of latitude) · 69.17.
+
+                // All we need to do is find the cosine of the degrees of latitude, then multiply that by 69.17 miles.
+
+                //todo: find distance of latitude
+                //1 degree of latitude is approx 69 miles
+
+                //todo: find the hypotenuse of the two distances (assuming 45 degree angle)
+
+
+
+
+
+
+
+
                 Double distance = (distanceLatitude + distanceLongitude) / 2; //calculate overall distance
+
+
+
+
+
+
+
 
                 listing.getUser().setDistance(distance); //set distance in User
             }
-            System.out.println("calculated distance: " + listing.getUser().getDistance() + "\n");
         }
         //once distance between user and other users has been calculated,
 
