@@ -176,26 +176,27 @@ public class SearchService {
 
 
 
+                //look up how latitude works, when it wraps around the globe, the line where it resets?
+                // longitude can be + or -, is 0 at equator
+                // latitude is degree angles of a circle
+                //todo: make sure ur not cancelling out the - in longitude too soon!!
 
 
-                //todo: look into doing a more in-depth calculation with the earth as a sphere
-                // instead of working in 2D? https://stackoverflow.com/questions/27928/calculate-distance-between-two-latitude-longitude-points-haversine-formula
+                //todo: use approx. formulas below and put in hypotenuse formula to get distance
 
 
-
-                //todo: let's set this up correctly.
                 //todo: find the distance of the longitude using the latitude and cosine
                 //The equation for calculating the number of miles that
                 // each degree of longitude represents at any given latitude is:
                 // miles = cosine (degrees of latitude) · 69.17.
 
-                // All we need to do is find the cosine of the degrees of latitude, then multiply that by 69.17 miles.
+                // latitude is about x69
 
                 //todo: find distance of latitude
                 //1 degree of latitude is approx 69 miles
 
                 //todo: find the hypotenuse of the two distances (assuming 45 degree angle)
-
+                //c= rootOf( aSquared + bSquared)
 
 
 
