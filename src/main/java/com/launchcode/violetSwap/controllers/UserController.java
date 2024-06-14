@@ -1,16 +1,9 @@
 package com.launchcode.violetSwap.controllers;
 
 
-import com.launchcode.violetSwap.models.Listing;
-
-import com.launchcode.violetSwap.models.Email;
-
-import com.launchcode.violetSwap.models.LoginType;
-import com.launchcode.violetSwap.models.User;
+import com.launchcode.violetSwap.models.*;
 
 import com.launchcode.violetSwap.models.data.ListingRepository;
-
-import com.launchcode.violetSwap.models.UserService;
 
 import com.launchcode.violetSwap.models.data.UserRepository;
 import com.launchcode.violetSwap.models.dto.UpdateFormDTO;
@@ -38,6 +31,8 @@ public class UserController {
     private ListingRepository listingRepository;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ZipcodeDataService zipcodeDataService;
 
 
     private static final String userSessionKey = "user";
@@ -84,9 +79,20 @@ public class UserController {
 
 
         currentUser.setEmail(updateFormDTO.getEmail());
-        currentUser.setZipcode(updateFormDTO.getZipcode());
 
-        //TODO: set city, state, and lat/long here. If no data to do so, return.
+        String zipcode = updateFormDTO.getZipcode();
+
+        currentUser.setZipcode(zipcode); //set zipcode
+
+
+        ZipcodeData data = zipcodeDataService.findAllData(zipcode)[0]; //get location data from GeocodeAPI using zipcode
+
+        currentUser.setAddress(data.getDisplay_name()); //set address, latitude, longitude in user
+        currentUser.setLatitude(Double.valueOf(data.getLat()));
+        currentUser.setLongitude(Double.valueOf(data.getLon()));
+
+
+
 
 
         userRepository.save(currentUser);

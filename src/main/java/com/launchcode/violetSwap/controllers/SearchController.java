@@ -123,13 +123,13 @@ public class SearchController {
 //        if (user == null){
 //            return "redirect:/user/update";
 //        }
-
+        List<Listing> sortedListings = null;
         if (Objects.equals(sortBy, "distanceAscending")){
-            searchService.sortListingsByDistance(request);
+            sortedListings=searchService.sortListingsByDistance(request);
         } else if (Objects.equals(sortBy, "distanceDescending")){
-            searchService.ReverseSortListingsByDistance(request);
+            sortedListings=searchService.ReverseSortListingsByDistance(request);
         }
-
+        model.addAttribute("listings", sortedListings);
 
         return "search/listings";
     }
