@@ -180,6 +180,9 @@ public class SearchService {
                 // longitude can be + or -, is 0 at equator
                 // latitude is degree angles of a circle
                 //todo: make sure ur not cancelling out the - in longitude too soon!!
+                // Math.sqrt(x) 	Returns the square root of x 	            double
+                // Math.pow(x, y) 	Returns the value of x to the power of y 	double
+                // Math.cos(x) 	    Returns the cosine of x (x is in radians) 	double
 
 
                 //todo: use approx. formulas below and put in hypotenuse formula to get distance
