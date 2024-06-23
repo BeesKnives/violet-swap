@@ -189,7 +189,7 @@ public class SearchService {
 
 
 
-                //todo: round down to 1 decimal place!!
+                //todo: round down to 1 decimal place!! Test - see how accurate.
 
 
 
@@ -203,6 +203,9 @@ public class SearchService {
 
 
         //TODO: this is quite clunky, we should look into using a SQL query to order the list of listings, then delete those that don't match filteredlistings?
+        // Then again, the distance isn't being stored in the SQL, but the session. Not sure how to go about this in this way.
+        // Maybe ask other coders what would be good for efficiency for this?
+
         //todo: no. Send the list of listing ids in the SQL query, have it pick them out and order them, and then send the data back here??
 
 
