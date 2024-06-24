@@ -66,11 +66,11 @@
                 <div>
                     <label>User:</label>
                     <label th:text="${listing.user.username}"></label>
-                    <label th:if="${listing.user.distance != null}" th:text="'Distance: ' + ${listing.user.distance}"></label>
+                    <label th:if="${listing.user.distance != null}" th:text="'- Distance: ' + ${listing.user.distance} + ' miles'"></label>
                 </div>
             </td>
             <td width="50">
-            <span th:if="${listing.user != null && listing.user.id != null}">
+            <span th:if="${listing.user != null && listing.user.id != null && userId==listing.user.id}">
                 <a th:href="@{/user/update/{id}(id=${listing.id})}">
                     <button type="button">Update</button>
                 </a>

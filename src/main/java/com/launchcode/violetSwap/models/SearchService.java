@@ -190,7 +190,9 @@ public class SearchService {
 
 
                 //todo: round down to 1 decimal place!! Test - see how accurate.
+                //Math.round(v * 10) / 10d
 
+                distance= Math.round(distance * 10) / 10d;
 
 
                 listing.getUser().setDistance(distance); //set distance in User
