@@ -101,7 +101,22 @@ public class SearchController {
 //todo: undo all that extra stuff, just have the postmapping here set the listings in searchservice, and call searchservice's sort function
 
     @PostMapping("/variety/{id}") //______________________________________________Sort Listings in selected Variety
-    public String searchListingsForVariety(@PathVariable Integer id, Model model){
+    public String searchListingsForVariety(@PathVariable Integer id, Model model, HttpServletRequest request, @RequestParam String sortBy){
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("user");
+        model.addAttribute("userId", userId);
+
+        List<Listing> listings = searchService.setFilteredListingsByVariety(id); //gets listings of this variety, and sets
+
+        //copy/paste from below:
+        List<Listing> sortedListings = null;
+        if (Objects.equals(sortBy, "distanceAscending")){
+            sortedListings=searchService.sortListingsByDistance(request);
+        } else if (Objects.equals(sortBy, "distanceDescending")){
+            sortedListings=searchService.ReverseSortListingsByDistance(request);
+        }
+        model.addAttribute("listings", sortedListings);
+
 
         return "/search/listings";
         //set searchService's Listings to listingRepository.findById(), then send to listings PostMapping

@@ -32,6 +32,28 @@ public class SearchService {
     List<User> filteredUsers = new ArrayList<User>();
     List<Variety> filteredVarieties = new ArrayList<Variety>();
 
+    //_____________________________________________________________________________________________________
+public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: set filteredListings according to the variety id provided
+
+    //todo:write a query to get all listings with the specific id in varietyId?
+
+    if(varietyId==null){
+        filteredListings = listingRepository.findAll();
+        return filteredListings;
+    }
+
+    Variety selectedVariety = varietyRepository.findById(varietyId).orElse(null); //get variety from varietyRepository
+    if(selectedVariety != null){
+        filteredListings.clear();
+        filteredListings.addAll(selectedVariety.getListings()); //have filtered listings be just the ones of this variety
+    }
+
+    return filteredListings;
+}
+
+
+
+
 //_____________________________________________________________________________________________________SEARCHES
 //_____________________________________________________________________________________________________
 
