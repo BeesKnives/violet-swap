@@ -15,6 +15,7 @@ import com.launchcode.violetSwap.models.data.VarietyRepository;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 //connects to search/varieties, and search/variety/{id}
 @Controller
@@ -41,19 +42,6 @@ public class SearchController {
         List<Variety> varieties = varietyRepository.findAll();
         model.addAttribute("varieties", varieties);
         return "/search/varieties";
-    }
-
-    @GetMapping("/variety/{id}")//_________________________________________________Show Listings in selected Variety
-    public String showListingsForVariety( @PathVariable Integer id, Model model) {
-
-        Variety selectedVariety = varietyRepository.findById(id).orElse(null);
-        if (selectedVariety != null) {
-            model.addAttribute("listings", selectedVariety.getListings());
-            model.addAttribute("selectedVariety", selectedVariety);
-            return "/search/listings";
-        } else {
-            return "redirect:/search/varieties";
-        }
     }
 
 
@@ -96,21 +84,69 @@ public class SearchController {
 
     //____________________________________________________________________________________________________show listings
 
+    @GetMapping("/variety/{id}")//_________________________________________________Show Listings in selected Variety
+    public String showListingsForVariety( @PathVariable Integer id, Model model) {
 
-    @GetMapping("/listings")
+        Variety selectedVariety = varietyRepository.findById(id).orElse(null);
+        if (selectedVariety != null) {
+            model.addAttribute("listings", selectedVariety.getListings());
+            model.addAttribute("selectedVariety", selectedVariety);
+            return "/search/listings";
+        } else {
+            return "redirect:/search/varieties";
+        }
+    }
+
+
+//todo: undo all that extra stuff, just have the postmapping here set the listings in searchservice, and call searchservice's sort function
+
+    @PostMapping("/variety/{id}") //______________________________________________Sort Listings in selected Variety
+    public String searchListingsForVariety(@PathVariable Integer id, Model model, HttpServletRequest request, @RequestParam String sortBy){
+        HttpSession session = request.getSession();
+        Integer userId = (Integer) session.getAttribute("user");
+        model.addAttribute("userId", userId);
+
+        List<Listing> listings = searchService.setFilteredListingsByVariety(id); //gets listings of this variety, and sets
+
+        //copy/paste from below:
+        List<Listing> sortedListings = null;
+        if (Objects.equals(sortBy, "distanceAscending")){
+            sortedListings=searchService.sortListingsByDistance(request);
+        } else if (Objects.equals(sortBy, "distanceDescending")){
+            sortedListings=searchService.ReverseSortListingsByDistance(request);
+        }
+        model.addAttribute("listings", sortedListings);
+
+
+        return "/search/listings";
+        //set searchService's Listings to listingRepository.findById(), then send to listings PostMapping
+    }
+
+
+    @GetMapping("/listings") //todo: maybe have this as /listings/{id}, and have the id be all or 0?? for the non-specific searches.
     public String displayListings(Model model, HttpServletRequest request) {
         HttpSession session = request.getSession();
         Integer userId = (Integer) session.getAttribute("user");
+
         List<Listing> listings = listingRepository.findAll();
+//
+//        List<Listing> listings;
+//        if(id==null){
+//            listings = listingRepository.findAll(); //if no selected variety, continue as normal
+//        }else{
+//
+//            Variety selectedVariety = varietyRepository.findById(id).orElse(null);
+//            if (selectedVariety != null) {
+//                listings = (List<Listing>) selectedVariety.getListings(); //get listings for selected variety
+//            }else {
+//                return "redirect:/search/varieties";
+//            }
+//        }
+
 
         model.addAttribute("userId", userId);
-        //model.addAttribute("maturityLevels", Maturity.values());
         model.addAttribute("listings", listings);
 
-
-        //List<String> sortBy = List.of("Distance", "Recent(not currently active)");
-
-        //model.addAttribute("sortBy", sortBy);
         return "search/listings";
     }
 
