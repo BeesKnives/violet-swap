@@ -85,7 +85,9 @@ public class SearchController {
     //____________________________________________________________________________________________________show listings
 
     @GetMapping("/variety/{id}")//_________________________________________________Show Listings in selected Variety
-    public String showListingsForVariety( @PathVariable Integer id, Model model) {
+    public String showListingsForVariety(@PathVariable Integer id, Model model) {
+
+        //todo: set PathVariable to optional, if null, show all listings
 
         Variety selectedVariety = varietyRepository.findById(id).orElse(null);
         if (selectedVariety != null) {
@@ -98,7 +100,12 @@ public class SearchController {
     }
 
 
-//todo: undo all that extra stuff, just have the postmapping here set the listings in searchservice, and call searchservice's sort function
+    //todo: look at notes for query request and making the queries optional.
+    // There def. was a way to do it, can also look at book. Then u can make /varieties just /variety?
+
+
+    //todo: merge methods that copy from eachother into one to dry the code, for SearchController. Should I make a FilterController?"
+    //todo: later - maybe instead of {id}, it's {variableName}?
 
     @PostMapping("/variety/{id}") //______________________________________________Sort Listings in selected Variety
     public String searchListingsForVariety(@PathVariable Integer id, Model model, HttpServletRequest request, @RequestParam String sortBy){
