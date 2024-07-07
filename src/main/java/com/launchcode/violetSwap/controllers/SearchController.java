@@ -102,6 +102,9 @@ public class SearchController {
 
     //todo: look at notes for query request and making the queries optional.
     // There def. was a way to do it, can also look at book. Then u can make /varieties just /variety?
+    // Ex: http://lyndonlyon.com/store/index.php?main_page=index&cPath=9_16
+
+    //todo: how to make the url like that? just redirect to it in controller??
 
 
     //todo: merge methods that copy from eachother into one to dry the code, for SearchController. Should I make a FilterController?"
