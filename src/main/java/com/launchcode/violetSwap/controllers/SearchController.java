@@ -105,6 +105,8 @@ public class SearchController {
     // Ex: http://lyndonlyon.com/store/index.php?main_page=index&cPath=9_16
 
     //todo: how to make the url like that? just redirect to it in controller??
+    //      check if u need to change the view or the controller to do this - write down changes before doing them
+    //todo: have a controller to detect when there's requestparams, and then call the right controllers
 
 
     //todo: merge methods that copy from eachother into one to dry the code, for SearchController. Should I make a FilterController?"
