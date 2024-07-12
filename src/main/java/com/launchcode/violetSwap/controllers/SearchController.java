@@ -82,6 +82,12 @@ public class SearchController {
 //__________________________________________________________________________________________________SEARCH BY LISTING
 //_______________________________________________________________________________________________________________
 
+    //todo: varietyId passed in the url from (POST)/varieties to (GET)/listings ((and (POST)/listings?) - test if needed) (getting rid of (GET & POST)variety/{id})
+    // controller takes the id and sets the list in searchservice, if no id, set list to all
+
+
+    //todo: later - maybe instead of {id}, it's {variableName}?
+
     //____________________________________________________________________________________________________show listings
 
     @GetMapping("/variety/{id}")//_________________________________________________Show Listings in selected Variety
@@ -100,17 +106,6 @@ public class SearchController {
     }
 
 
-    //todo: look at notes for query request and making the queries optional.
-    // There def. was a way to do it, can also look at book. Then u can make /varieties just /variety?
-    // Ex: http://lyndonlyon.com/store/index.php?main_page=index&cPath=9_16
-
-    //todo: how to make the url like that? just redirect to it in controller??
-    //      check if u need to change the view or the controller to do this - write down changes before doing them
-    //todo: have a controller to detect when there's requestparams, and then call the right controllers
-
-
-    //todo: merge methods that copy from eachother into one to dry the code, for SearchController. Should I make a FilterController?"
-    //todo: later - maybe instead of {id}, it's {variableName}?
 
     @PostMapping("/variety/{id}") //______________________________________________Sort Listings in selected Variety
     public String searchListingsForVariety(@PathVariable Integer id, Model model, HttpServletRequest request, @RequestParam String sortBy){
@@ -119,6 +114,7 @@ public class SearchController {
         model.addAttribute("userId", userId);
 
         List<Listing> listings = searchService.setFilteredListingsByVariety(id); //gets listings of this variety, and sets
+
 
         //copy/paste from below:
         List<Listing> sortedListings = null;
