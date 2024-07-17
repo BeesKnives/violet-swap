@@ -23,7 +23,8 @@
 
             <!--            <a th:href="@{/search/search/variety/{id}(id=${variety.id})}" th:text="${variety.name}"></a>-->
 
-            <a th:href="@{/search/variety/{id}(id=${variety.id})}" th:text="${variety.name}"></a>
+<!--            <a th:href="@{/search/variety/{id}(id=${variety.id})}" th:text="${variety.name}"></a>-->
+            <a th:href="@{/search/listings?varietyId={id}(id=${variety.id})}" th:text="${variety.name}"></a>
 
         </li>
     </ul>
