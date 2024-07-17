@@ -46,6 +46,8 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
     if(selectedVariety != null){
         filteredListings.clear();
         filteredListings.addAll(selectedVariety.getListings()); //have filtered listings be just the ones of this variety
+    }else{ //if selectedVariety is null, show all listings
+        filteredListings = listingRepository.findAll();
     }
 
     return filteredListings;
