@@ -70,13 +70,21 @@
                 </div>
             </td>
             <td width="50">
-            <span th:if="${listing.user != null && listing.user.id != null && userId==listing.user.id}">
-                <a th:href="@{/user/update/{id}(id=${listing.id})}">
+            <span th:if="${listing.user != null && listing.user.id != null}">
+                <div th:if="${userId == listing.user.id}">
+                    <a th:href="@{/user/update/{id}(id=${listing.id})}">
                     <button type="button">Update</button>
-                </a>
-                <a th:href="@{/user/delete-listing/{id}(id=${listing.id})}">
-                    <button type="button">Delete </button>
-                </a>
+                    </a>
+                    <a th:href="@{/user/delete-listing/{id}(id=${listing.id})}">
+                        <button type="button">Delete </button>
+                    </a>
+                </div>
+                <div th:if="${userId != listing.user.id}">
+                    <a th:href="@{/user/{listingUsername}(listingUsername=${listing.user.username})}">
+                        <button type="button">Let's Trade!</button>
+                    </a>
+                </div>
+
             </span>
                 <span th:unless="${listing.user != null && listing.user.id != null}">
                 <span>Update</span>

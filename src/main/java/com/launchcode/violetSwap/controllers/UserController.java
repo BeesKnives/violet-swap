@@ -50,6 +50,7 @@ public class UserController {
         model.addAttribute("listings", currentUser.getListings());
         model.addAttribute("isCurrentUser", true);
         model.addAttribute("displayedUser", currentUser);
+        model.addAttribute("userId", currentUser.getId());
 
         return "user/details";
     }
