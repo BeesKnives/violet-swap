@@ -45,9 +45,12 @@
 
 <h1>Listings</h1>
 <!-- new-listing button -->
-<a th:href="@{/user/new-listing}">
-    <button type="button">Add Listing</button>
-</a>
+<div th:if="${isCurrentUser}">
+    <a th:href="@{/user/new-listing}">
+        <button type="button">Add Listing</button>
+    </a>
+</div>
+
 <!-- user's listings -->
 <div th:replace="fragments :: showListings"></div>
 
