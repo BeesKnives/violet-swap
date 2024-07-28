@@ -37,6 +37,25 @@
         </th:block>
     </div>
 </header>
+<!-- showUsers (pass in users to show) -->
+<div th:fragment="showUsers">
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <table border="1" style="background-color: #DCDCDC">
+        <thead></thead>
+        <tr th:each="user : ${users}">
+            <td>
+                <div>
+                    <label th:for="user" th:if="${user.username != null}" th:text="${user.username}"></label>
+                </div>
+                <div th:if="${user.distance != null}" >
+                    <label th:for="distance">Distance: </label>
+                    <label th:text="${user.distance}"></label>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+</div>
 
 <!-- showListings (pass in listings to show) -->
 <div th:fragment="showListings">

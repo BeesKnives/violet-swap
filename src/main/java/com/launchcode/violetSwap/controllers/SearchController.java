@@ -1,10 +1,8 @@
 package com.launchcode.violetSwap.controllers;
 
-import com.launchcode.violetSwap.models.Listing;
-import com.launchcode.violetSwap.models.Maturity;
-import com.launchcode.violetSwap.models.SearchService;
-import com.launchcode.violetSwap.models.Variety;
+import com.launchcode.violetSwap.models.*;
 import com.launchcode.violetSwap.models.data.ListingRepository;
+import com.launchcode.violetSwap.models.data.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +26,19 @@ public class SearchController {
     private SearchService searchService; //instance of searchService, so we can call search methods
     @Autowired
     private ListingRepository listingRepository;
+    @Autowired
+    private UserRepository userRepository;
+//______________________________________________________________________________________________SEARCH BY USER
+//_______________________________________________________________________________________________________________
+
+    @GetMapping("/users")//_________________________________________________Browse All Users
+    public String searchUsers(Model model){
+        List<User> users = (List<User>) userRepository.findAll();
+        model.addAttribute("users", users);
+        return "/search/users";
+    }
+
+
 
 //______________________________________________________________________________________________SEARCH BY VARIETY
 //_______________________________________________________________________________________________________________
@@ -35,10 +46,6 @@ public class SearchController {
 
     @GetMapping("/varieties")//_________________________________________________Browse All Varieties and can search
     public String searchVarieties(Model model) {
-
-        //optional searchParam/query in url?
-        //if searchParam is present, do the thing
-
         List<Variety> varieties = varietyRepository.findAll();
         model.addAttribute("varieties", varieties);
         return "/search/varieties";
