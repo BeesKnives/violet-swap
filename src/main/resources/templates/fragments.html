@@ -45,13 +45,14 @@
         <tr th:each="user : ${users}">
             <td>
                 <div>
-                    <label th:for="user" th:if="${user.username != null}" th:text="${user.username}"></label>
+                    <a th:for="user" th:if="${user.username != null}" th:text="${user.username}" th:href="@{/user/{Username}(Username=${user.username})}"></a>
                 </div>
                 <div th:if="${user.distance != null}" >
                     <label th:for="distance">      Distance: </label>
                     <label th:text="${user.distance}"></label>
                 </div>
             </td>
+
         </tr>
 
     </table>
