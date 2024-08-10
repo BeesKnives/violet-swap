@@ -143,6 +143,7 @@ public class UserController {
             return "user/details";
         }
 
+        model.addAttribute("userId", currentUser.getId());
         model.addAttribute("isCurrentUser", isCurrentUser);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("displayedUser", userToDisplay);
