@@ -147,6 +147,7 @@ public class UserController {
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("displayedUser", userToDisplay);
         model.addAttribute("emailToSend", new Email());
+        model.addAttribute("listings", userToDisplay.getListings());
 
         return "user/details";
     }
