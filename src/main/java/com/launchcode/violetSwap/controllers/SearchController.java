@@ -38,19 +38,29 @@ public class SearchController {
         return "/search/users";
     }
 
+    @PostMapping("/users")//
+    public String processSearchUsers(Model model, @RequestParam String searchTerm){
 
-
+        if (searchTerm != null && !searchTerm.isEmpty()) { //if searchTerm is present
+            List<User> userList = searchService.searchUsers(searchTerm); //get a list of users that match searchTerm
+            if (userList != null){ //if userList is present
+                model.addAttribute("users", userList);
+                return "/search/users";
+            }
+            // if userlist is not present, return to search/users
+            return "redirect:/search/users";
+        }
+        // if searchTerm is not present, return to search/users
+        return "redirect:/search/users";
+    }
 //______________________________________________________________________________________________SEARCH BY VARIETY
 //_______________________________________________________________________________________________________________
-
-
     @GetMapping("/varieties")//_________________________________________________Browse All Varieties and can search
     public String searchVarieties(Model model) {
         List<Variety> varieties = varietyRepository.findAll();
         model.addAttribute("varieties", varieties);
         return "/search/varieties";
     }
-
 
 
     @PostMapping("/varieties")//_____________________________________________________________search for a variety

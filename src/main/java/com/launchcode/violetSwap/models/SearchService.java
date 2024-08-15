@@ -101,7 +101,17 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
         return filteredVarieties;
     }
 
-
+    //search for users
+    public List<User> searchUsers(String search){
+        filteredUsers.clear();//so no duplicates
+        search = search.toUpperCase();
+        for(User user : userRepository.findAll()){ //for every user
+            if(user.getUsername().toUpperCase().contains(search)){ //if they contain the search term, save in filteredUsers
+                filteredUsers.add(user);
+            }
+        }
+        return filteredUsers;
+    }
 
 
     //search Users by zipcode
@@ -145,17 +155,7 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
 
 
 
-    //search for users
-    public List<User> searchUsers(String search){
-        filteredUsers.clear();//so no duplicates
-        search = search.toUpperCase();
-        for(User user : userRepository.findAll()){ //for every user
-            if(user.getUsername().toUpperCase().contains(search)){ //if they contain the search term, save in filteredUsers
-                filteredUsers.add(user);
-            }
-        }
-        return filteredUsers;
-    }
+
 //_____________________________________________________________________________________________________ END SEARCHES
 //_____________________________________________________________________________________________________
 

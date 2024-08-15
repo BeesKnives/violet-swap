@@ -4,6 +4,16 @@
 <body  style="background-color: #008080">
 
 <h1>Users</h1>
+<form th:action="@{/search/users}" method="post" style="max-width:600px;">
+    <div class="form-group">
+        <label>Search for Users :
+            <input class="form-control" type="text" name="searchTerm" />
+        </label>
+        <!-- Include CSRF token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit">Search</button>
+    </div>
+</form>
 
 <form method="post">
     <div class="form-group">
