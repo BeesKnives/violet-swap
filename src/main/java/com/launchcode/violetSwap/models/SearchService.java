@@ -319,4 +319,18 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
     //controller will pick which search method to call based on inputs selected in the view and pass in the search term
     //method will return a List<> of listings or users or varieties
 
+
+//_____________________________________________________________________________________________________ Generic GETTERS / SETTERS
+
+    public List<User> getUsers(){
+        return filteredUsers;
+    }
+
+    public void setFilteredUsersToAll(){
+        filteredUsers = (List<User>) userRepository.findAll();
+    }
+
+
+
+
 }

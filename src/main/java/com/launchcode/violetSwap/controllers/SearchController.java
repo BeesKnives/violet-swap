@@ -33,25 +33,42 @@ public class SearchController {
 
     @GetMapping("/users")//_________________________________________________Browse All Users
     public String searchUsers(Model model){
-        List<User> users = (List<User>) userRepository.findAll();
-        model.addAttribute("users", users);
+        searchService.setFilteredUsersToAll();
+        model.addAttribute("users", (List<User>) userRepository.findAll());
         return "/search/users";
     }
 
     @PostMapping("/users")//
-    public String processSearchUsers(Model model, @RequestParam String searchTerm){
+    public String processSearchUsers(Model model, @RequestParam(required=false) String searchTerm, @RequestParam(required=false) String sortBy, HttpServletRequest request){
 
-        if (searchTerm != null && !searchTerm.isEmpty()) { //if searchTerm is present
-            List<User> userList = searchService.searchUsers(searchTerm); //get a list of users that match searchTerm
-            if (userList != null){ //if userList is present
-                model.addAttribute("users", userList);
-                return "/search/users";
+        if (searchTerm != null && !searchTerm.isEmpty()) { //if searchTerm param is present
+            List<User> userList = searchService.searchUsers(searchTerm); //set a list of users that match searchTerm in searchService
+            model.addAttribute("searchFor", searchTerm);
+            if (userList.isEmpty()){ //if userList is not present, return to search/users
+                //todo: error msg: no users found
+                return "redirect:/search/users";
             }
-            // if userlist is not present, return to search/users
-            return "redirect:/search/users";
         }
-        // if searchTerm is not present, return to search/users
-        return "redirect:/search/users";
+//        else{ //if searchTerm is not present, set users to all in searchService
+//            searchService.setFilteredUsersToAll();
+//        }
+
+        if (sortBy != null && !sortBy.isEmpty()){ //if sortBy param is present, sort users in searchService
+            if (Objects.equals(sortBy, "distanceAscending")){
+                searchService.sortUsersByDistance(request);
+            } else if (Objects.equals(sortBy, "distanceDescending")){
+                searchService.ReverseSortUsersByDistance(request);
+            }
+        }
+
+
+        List<User> userList = searchService.getUsers(); //get userList from searchService and add it to the model
+        model.addAttribute("users", userList);
+
+
+        return "/search/users";
+
+
     }
 //______________________________________________________________________________________________SEARCH BY VARIETY
 //_______________________________________________________________________________________________________________
@@ -89,16 +106,11 @@ public class SearchController {
         return "redirect:/search/varieties";
     }
 
-
 //__________________________________________________________________________________________________SEARCH BY LISTING
 //_______________________________________________________________________________________________________________
-
-
-
     //todo: later - maybe instead of {id}, it's {variableName}?
 
     //____________________________________________________________________________________________________show listings
-
 
 
     @GetMapping("/listings") //listings?variety={varietyId}
@@ -131,8 +143,6 @@ public class SearchController {
         if(varietyId == null){//if no variety being sent in:
             searchService.setFilteredListingsByVariety(null);
         }
-
-
 
 
         List<Listing> sortedListings = null;
