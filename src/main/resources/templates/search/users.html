@@ -1,11 +1,50 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="https://www.thymeleaf.org/">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<!--in progress-->
+<html xmlns:th="http://www.thymeleaf.org">
+<header th:replace="~{fragments :: header}"></header>
+<body  style="background-color: #008080">
+
+<h1>Users</h1>
+<h2 th:if="searchFor" th:text="${searchFor}"></h2>
+
+<form th:action="@{/search/users}" method="post" style="max-width:600px;">
+    <div class="form-group">
+        <label>Search :
+            <input class="form-control" type="text" name="searchTerm" />
+        </label>
+        <!-- Include CSRF token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <button type="submit">Search</button>
+    </div>
+</form>
+
+<form method="post">
+    <div class="form-group">
+
+<!--        <label>Search for Users :-->
+<!--            <input class="form-control" type="text" name="searchTerm" />-->
+<!--        </label>-->
+
+
+        <label>Sort By: </label>
+        <select id="sortBy" name="sortBy">
+            <option value="null">---</option>
+            <option value="distanceAscending">Closest Distance</option>
+            <option value="distanceDescending">Farthest Distance</option>
+        </select>
+
+        <!-- Include CSRF token -->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+        <input type="submit" value="Submit" />
+    </div>
+
+</form>
+
+
+
+
+<div th:replace="fragments :: showUsers"></div>
+
+
 </body>
 </html>
 

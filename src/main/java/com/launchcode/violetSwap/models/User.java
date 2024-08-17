@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class User extends AbstractEntity {
+public class User extends AbstractEntity implements Comparable<User>{
     private static final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
     @NotNull
@@ -69,6 +69,16 @@ public class User extends AbstractEntity {
         }
 
         return true;
+    }
+
+
+
+    //override the compareTo method of Comparable class, will be used in SearchService for sorting
+    @Override public int compareTo(User otherUser){
+
+        Double compareDistance = this.getDistance() - otherUser.getDistance(); //comparing user's distances
+
+        return (int)Math.round(compareDistance); //convert Double to int
     }
 
 

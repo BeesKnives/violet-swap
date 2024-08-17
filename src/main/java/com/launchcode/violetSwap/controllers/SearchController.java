@@ -1,10 +1,8 @@
 package com.launchcode.violetSwap.controllers;
 
-import com.launchcode.violetSwap.models.Listing;
-import com.launchcode.violetSwap.models.Maturity;
-import com.launchcode.violetSwap.models.SearchService;
-import com.launchcode.violetSwap.models.Variety;
+import com.launchcode.violetSwap.models.*;
 import com.launchcode.violetSwap.models.data.ListingRepository;
+import com.launchcode.violetSwap.models.data.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,22 +26,58 @@ public class SearchController {
     private SearchService searchService; //instance of searchService, so we can call search methods
     @Autowired
     private ListingRepository listingRepository;
-
-//______________________________________________________________________________________________SEARCH BY VARIETY
+    @Autowired
+    private UserRepository userRepository;
+//______________________________________________________________________________________________SEARCH BY USER
 //_______________________________________________________________________________________________________________
 
+    @GetMapping("/users")//_________________________________________________Browse All Users
+    public String searchUsers(Model model){
+        searchService.setFilteredUsersToAll();
+        model.addAttribute("users", (List<User>) userRepository.findAll());
+        return "/search/users";
+    }
 
+    @PostMapping("/users")//
+    public String processSearchUsers(Model model, @RequestParam(required=false) String searchTerm, @RequestParam(required=false) String sortBy, HttpServletRequest request){
+
+        if (searchTerm != null && !searchTerm.isEmpty()) { //if searchTerm param is present
+            List<User> userList = searchService.searchUsers(searchTerm); //set a list of users that match searchTerm in searchService
+            model.addAttribute("searchFor", searchTerm);
+            if (userList.isEmpty()){ //if userList is not present, return to search/users
+                //todo: error msg: no users found
+                return "redirect:/search/users";
+            }
+        }
+//        else{ //if searchTerm is not present, set users to all in searchService
+//            searchService.setFilteredUsersToAll();
+//        }
+
+        if (sortBy != null && !sortBy.isEmpty()){ //if sortBy param is present, sort users in searchService
+            if (Objects.equals(sortBy, "distanceAscending")){
+                searchService.sortUsersByDistance(request);
+            } else if (Objects.equals(sortBy, "distanceDescending")){
+                searchService.ReverseSortUsersByDistance(request);
+            }
+        }
+
+
+        List<User> userList = searchService.getUsers(); //get userList from searchService and add it to the model
+        model.addAttribute("users", userList);
+
+
+        return "/search/users";
+
+
+    }
+//______________________________________________________________________________________________SEARCH BY VARIETY
+//_______________________________________________________________________________________________________________
     @GetMapping("/varieties")//_________________________________________________Browse All Varieties and can search
     public String searchVarieties(Model model) {
-
-        //optional searchParam/query in url?
-        //if searchParam is present, do the thing
-
         List<Variety> varieties = varietyRepository.findAll();
         model.addAttribute("varieties", varieties);
         return "/search/varieties";
     }
-
 
 
     @PostMapping("/varieties")//_____________________________________________________________search for a variety
@@ -72,16 +106,11 @@ public class SearchController {
         return "redirect:/search/varieties";
     }
 
-
 //__________________________________________________________________________________________________SEARCH BY LISTING
 //_______________________________________________________________________________________________________________
-
-
-
     //todo: later - maybe instead of {id}, it's {variableName}?
 
     //____________________________________________________________________________________________________show listings
-
 
 
     @GetMapping("/listings") //listings?variety={varietyId}
@@ -114,8 +143,6 @@ public class SearchController {
         if(varietyId == null){//if no variety being sent in:
             searchService.setFilteredListingsByVariety(null);
         }
-
-
 
 
         List<Listing> sortedListings = null;

@@ -101,7 +101,17 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
         return filteredVarieties;
     }
 
-
+    //search for users
+    public List<User> searchUsers(String search){
+        filteredUsers.clear();//so no duplicates
+        search = search.toUpperCase();
+        for(User user : userRepository.findAll()){ //for every user
+            if(user.getUsername().toUpperCase().contains(search)){ //if they contain the search term, save in filteredUsers
+                filteredUsers.add(user);
+            }
+        }
+        return filteredUsers;
+    }
 
 
     //search Users by zipcode
@@ -145,17 +155,7 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
 
 
 
-    //search for users
-    public List<User> searchUsers(String search){
-        filteredUsers.clear();//so no duplicates
-        search = search.toUpperCase();
-        for(User user : userRepository.findAll()){ //for every user
-            if(user.getUsername().toUpperCase().contains(search)){ //if they contain the search term, save in filteredUsers
-                filteredUsers.add(user);
-            }
-        }
-        return filteredUsers;
-    }
+
 //_____________________________________________________________________________________________________ END SEARCHES
 //_____________________________________________________________________________________________________
 
@@ -212,10 +212,6 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
                 Double distance = Math.sqrt( Math.pow(distanceLatitude,2) + Math.pow(distanceLongitude,2)); //calculate overall distance
 
 
-
-                //todo: round down to 1 decimal place!! Test - see how accurate.
-                //Math.round(v * 10) / 10d
-
                 distance= Math.round(distance * 10) / 10d;
 
 
@@ -232,18 +228,9 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
         // Then again, the distance isn't being stored in the SQL, but the session. Not sure how to go about this in this way.
         // Maybe ask other coders what would be good for efficiency for this?
 
-        //todo: no. Send the list of listing ids in the SQL query, have it pick them out and order them, and then send the data back here??
+        //todo: Send the list of listing ids in the SQL query, have it pick them out and order them, and then send the data back here??
 
 
-
-        //loop through each listing
-            //check - if listing.user has relativeDistance already on it, break
-        //get listing.user.latitude and listing.user.longitude
-        //do math to find the distance between the two (look up? minus each and convert any negatives to positives? Then add them together and divide by 2)
-        //set a relative distance field in user?
-            //todo:have a check, if user id matches previously calculated users, just use the already made relative distance filed
-            //(maybe?) check - list of user's listings and list of filtered listings, if they match, put user's relative distance on them.
-        //sort by relative distance (maybe have a separate method that can switch ascending/descending by reversing the order of sorting)
 
 
 
@@ -259,9 +246,91 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
         return filteredListings;
     }
 
+
+
+
+
+
+
+    //sort users by distance ascending
+    public List<User> sortUsersByDistance(HttpServletRequest request){
+        if (filteredUsers.isEmpty()){
+            filteredUsers = (List<User>) userRepository.findAll();
+        }
+
+        User currentUser = userService.getUserFromSession(request.getSession()); //get user from session
+
+
+        Double currentUserLatitude = currentUser.getLatitude(); //get lat/long of currentUser
+        Double currentUserLongitude = currentUser.getLongitude();
+
+
+        for ( User user : filteredUsers ) { //for each user in filteredUsers
+
+            if(user.getDistance()==(null)){ //check if the user's distance has already been calculated.
+
+
+
+                //calculate distance between user and the other users:
+                Double listingLatitude = user.getLatitude(); //get lat/long of this user
+                Double listingLongitude = user.getLongitude();
+
+                //todo:have distance calculation be a separate method, send in both lats and longs, call here and in sortListingsByDistance
+
+                Double differenceLatitude = Math.abs(currentUserLatitude - listingLatitude); //get distance between lat/long
+                Double differenceLongitude = Math.abs(currentUserLongitude - listingLongitude);
+
+
+                //find the distance of the longitude using the latitude and cosine
+                // miles = cosine (degrees of latitude) · 69.17 * differenceLongitude
+                Double distanceLongitude = (Math.cos( differenceLatitude ) * 69.17) * differenceLongitude;
+
+                //find distance of latitude (miles)
+                Double distanceLatitude = differenceLatitude * 69;
+
+                // find the hypotenuse of the two distances (miles) -> hypotenuse = rootOf( aSquared + bSquared)
+                Double distance = Math.sqrt( Math.pow(distanceLatitude,2) + Math.pow(distanceLongitude,2)); //calculate overall distance
+
+
+                distance= Math.round(distance * 10) / 10d;
+
+
+                user.setDistance(distance); //set distance in user
+            }
+        }
+        //once distance between currentUser and other users has been calculated,
+        //order the listings by user.getDistance() - done in User's compareTo override, implemented here
+        Collections.sort(filteredUsers);
+
+        return filteredUsers;
+    }
+
+    //sort users by distance descending
+    public List<User> ReverseSortUsersByDistance(HttpServletRequest request) {
+
+        sortUsersByDistance(request);
+        Collections.reverse(filteredUsers);
+
+        return filteredUsers;
+    }
+
 //_____________________________________________________________________________________________________ END SORTING
 
     //controller will pick which search method to call based on inputs selected in the view and pass in the search term
     //method will return a List<> of listings or users or varieties
+
+
+//_____________________________________________________________________________________________________ Generic GETTERS / SETTERS
+
+    public List<User> getUsers(){
+        return filteredUsers;
+    }
+
+    public void setFilteredUsersToAll(){
+        filteredUsers = (List<User>) userRepository.findAll();
+    }
+
+
+
 
 }

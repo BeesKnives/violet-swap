@@ -143,10 +143,12 @@ public class UserController {
             return "user/details";
         }
 
+        model.addAttribute("userId", currentUser.getId());
         model.addAttribute("isCurrentUser", isCurrentUser);
         model.addAttribute("currentUser", currentUser);
         model.addAttribute("displayedUser", userToDisplay);
         model.addAttribute("emailToSend", new Email());
+        model.addAttribute("listings", userToDisplay.getListings());
 
         return "user/details";
     }
