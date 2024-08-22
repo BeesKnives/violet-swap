@@ -33,6 +33,13 @@ public class SearchService {
     List<Variety> filteredVarieties = new ArrayList<Variety>();
 
     //_____________________________________________________________________________________________________
+
+    //todo: searchquery, gets what to search for - listing/user/variety, and searchterm.
+    // Calls makeSearchTerm, then uses that to construct a query using concatination.
+    // Then returns the appropriate list (?) how to have it able to return different data types??
+    // Will it have to be 3 separate methods + the query constructor method?
+
+    //_____________________________________________________________________________________________________
 public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: set filteredListings according to the variety id provided
 
     //todo:write a query to get all listings with the specific id in varietyId?
