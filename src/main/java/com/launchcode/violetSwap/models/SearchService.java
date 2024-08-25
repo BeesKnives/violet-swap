@@ -40,21 +40,25 @@ public class SearchService {
     // Will it have to be 3 separate methods + the query constructor method?
     //should this be in the repositories?
 
-    public List<Listing> getFilteredListings(String search){
+    public List<User> getFilteredUsers(String search){
 
         //check not null?
 
         List<String> searchTerms = makeSearchTerm(search);
 
-        String query = "";
+        String query = "SELECT * FROM user WHERE CONTAINS  ";
 
         for(String searchTerm : searchTerms){
-            // stringOne = stringOne.concat(" ").concat(stringTwo).concat(stringThree).concat("@");
-            //use correct concatination
-            query + "" + searchTerm;
-            //look up how queries are formed,
-            //find listings that contain all searchTerms
+            //todo: set this up with a countdown the length of the searchTerms,
+
+            query.concat("(username, ").concat(searchTerm).concat(")").concat(" AND ");
+            //have a check, if countdown's not 0, then concat the AND here
+            //tick down on the countdown here
         }
+        query.substring(0, query.length()-5); //remove last 5 chars from query string
+
+        //todo: send query to MySQL, return list of users
+
     }
 
 
