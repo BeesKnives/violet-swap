@@ -38,6 +38,25 @@ public class SearchService {
     // Calls makeSearchTerm, then uses that to construct a query using concatination.
     // Then returns the appropriate list (?) how to have it able to return different data types??
     // Will it have to be 3 separate methods + the query constructor method?
+    //should this be in the repositories?
+
+    public List<Listing> getFilteredListings(String search){
+
+        //check not null?
+
+        List<String> searchTerms = makeSearchTerm(search);
+
+        String query = "";
+
+        for(String searchTerm : searchTerms){
+            // stringOne = stringOne.concat(" ").concat(stringTwo).concat(stringThree).concat("@");
+            //use correct concatination
+            query + "" + searchTerm;
+            //look up how queries are formed,
+            //find listings that contain all searchTerms
+        }
+    }
+
 
     //_____________________________________________________________________________________________________
 public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: set filteredListings according to the variety id provided
