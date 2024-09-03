@@ -39,25 +39,33 @@ public class SearchService {
     // Then returns the appropriate list (?) how to have it able to return different data types??
     // Will it have to be 3 separate methods + the query constructor method?
 
-    public List<User> getFilteredUsers(String search){
-
+    public String makeQueryFromSearch(String tableName, String columnName, String search){
         //check not null?
+        //check respository type
 
-        List<String> searchTerms = makeSearchTerm(search);
+        String table = tableName; //pick the table you are creating the query for
 
-        String query = "SELECT * FROM user WHERE CONTAINS  ";
-
-        for(String searchTerm : searchTerms){
-            //todo: set this up with a countdown the length of the searchTerms,
-
-            query.concat("(username, ").concat(searchTerm).concat(")").concat(" AND ");
-            //have a check, if countdown's not 0, then concat the AND here
-            //tick down on the countdown here
+        if (table==null){ //if no table found, return error msg
+            return "no repository found";
         }
-        query.substring(0, query.length()-5); //remove last 5 chars from query string
 
-        //todo: send query to MySQL, return list of users
 
+        List<String> searchTerms = makeSearchTerm(search); //make search term
+
+        String query = "SELECT * FROM ".concat(table).concat(" WHERE CONTAINS  "); //start query, including the table you will be searching in
+
+
+        int countdown = searchTerms.size(); //countdown the length of the searchTerms,
+        for(String searchTerm : searchTerms){
+            query.concat("(").concat(columnName).concat(", ").concat(searchTerm).concat(")");//for each searchTerm, concat onto query w/ column name and searchTerm
+
+            countdown --; //tick down on the countdown
+            if(countdown != 0){
+                query.concat(" AND "); //if it's not the end of the list, add an " AND " to the query
+            }
+
+        }
+        return query;
     }
 
 
