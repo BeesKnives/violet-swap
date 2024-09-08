@@ -40,12 +40,10 @@ public class SearchService {
     // Will it have to be 3 separate methods + the query constructor method?
 
     public String makeQueryFromSearch(String tableName, String columnName, String search){
-        //check not null?
-        //check respository type
 
         String table = tableName; //pick the table you are creating the query for
 
-        if (table==null){ //if no table found, return error msg
+        if (table==null){ //if no table found, return error msg //todo: set up for receiving error msgs
             return "no repository found";
         }
 

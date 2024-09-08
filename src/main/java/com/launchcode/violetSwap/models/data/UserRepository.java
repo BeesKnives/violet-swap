@@ -15,6 +15,9 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 
     @Query
     User findBySearch(List<String> list);
+    //todo: find tutorial showing how this works, examples needed
+    //todo: findBySearch gets the query(?) ias a string param, uses it to get users from repository
+    //todo: change from CRUD Repository to JPA repository?
 
     //todo:
     //https://docs.spring.io/spring-data/jpa/reference/repositories/query-methods-details.html#repositories.query-methods.query-creation
