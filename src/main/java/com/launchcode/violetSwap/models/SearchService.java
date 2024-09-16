@@ -33,6 +33,41 @@ public class SearchService {
     List<Variety> filteredVarieties = new ArrayList<Variety>();
 
     //_____________________________________________________________________________________________________
+
+    //todo: searchquery, gets what to search for - listing/user/variety, and searchterm.
+    // Calls makeSearchTerm, then uses that to construct a query using concatination.
+    // Then returns the appropriate list (?) how to have it able to return different data types??
+    // Will it have to be 3 separate methods + the query constructor method?
+
+    public String makeQueryFromSearch(String tableName, String columnName, String search){
+
+        String table = tableName; //pick the table you are creating the query for
+
+        if (table==null){ //if no table found, return error msg //todo: set up for receiving error msgs
+            return "no repository found";
+        }
+
+
+        List<String> searchTerms = makeSearchTerm(search); //make search term
+
+        String query = "SELECT * FROM ".concat(table).concat(" WHERE CONTAINS  "); //start query, including the table you will be searching in
+
+
+        int countdown = searchTerms.size(); //countdown the length of the searchTerms,
+        for(String searchTerm : searchTerms){
+            query.concat("(").concat(columnName).concat(", ").concat(searchTerm).concat(")");//for each searchTerm, concat onto query w/ column name and searchTerm
+
+            countdown --; //tick down on the countdown
+            if(countdown != 0){
+                query.concat(" AND "); //if it's not the end of the list, add an " AND " to the query
+            }
+
+        }
+        return query;
+    }
+
+
+    //_____________________________________________________________________________________________________
 public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: set filteredListings according to the variety id provided
 
     //todo:write a query to get all listings with the specific id in varietyId?
