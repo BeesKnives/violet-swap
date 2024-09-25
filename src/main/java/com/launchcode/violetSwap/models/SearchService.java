@@ -88,22 +88,30 @@ public class SearchService {
     }
 
     public String makeQueryFragmentFromSearch(String searchInput){ //makes query fragment from the searchTerm, calls makeSearchTerm
+        System.out.println("_____________________________________________"+"makeQueryFragment");
         List<String> searchTerms = makeSearchTerm(searchInput); //split searchInput into a list of strings
-        if (searchTerms.size()==1){ //if there's only 1 searchTerm, return it as a string
-            return searchTerms.toString();
-        }
         String queryFragment = "";
+
+        if (searchTerms.size()==1){ //if there's only 1 searchTerm, return it as a string
+            System.out.println("_____________________________________________01" + searchTerms.toString());
+            queryFragment = queryFragment.concat("'%").concat(searchTerms.get(0)).concat("%'");
+            System.out.println(queryFragment);
+            return queryFragment;
+
+        }
+
         int countdown = searchTerms.size(); //countdown the length of the searchTerms,
         for(String searchTerm : searchTerms){
 
-            queryFragment.concat(searchTerm);//for each searchTerm, concat onto queryFragment w/ searchTerm
+            queryFragment = queryFragment.concat("'%").concat(searchTerm).concat("%'");//for each searchTerm, concat onto queryFragment w/ searchTerm
 
             countdown --; //tick down on the countdown
             if(countdown != 0){
-                queryFragment.concat(" AND CONTAINS "); //if it's not the end of the list, add an " AND CONTAINS " to the query
+                queryFragment = queryFragment.concat(" AND LIKE "); //if it's not the end of the list, add an " AND CONTAINS " to the query
             }
 
         }
+        System.out.println("_____________________________________________02" + queryFragment);
         return queryFragment;
 
     }
@@ -115,6 +123,7 @@ public class SearchService {
 
     //search for varieties
     public List<Variety> searchVarieties(String search){
+        System.out.println("_____________________________________________"+"1");
         filteredVarieties.clear();//so no duplicates
 //        List<String> searchItems = makeSearchTerm(search); //make search parameter into a list of Strings (searchItems)
 
@@ -133,9 +142,12 @@ public class SearchService {
 //                }
 //            }
 //        }
-        String searchFragment = makeQueryFragmentFromSearch(search);
-        filteredVarieties = varietyRepository.searchVarietyByName(searchFragment);
-
+        System.out.println("_____________________________________________"+"2");
+        String queryFragment = makeQueryFragmentFromSearch(search);
+        System.out.println("_____________________________________________"+"3");
+        filteredVarieties = varietyRepository.searchVarietyByName(queryFragment);
+        System.out.println("_____________________________________________"+"4");
+        System.out.println(filteredVarieties);
         return filteredVarieties;
     }
 

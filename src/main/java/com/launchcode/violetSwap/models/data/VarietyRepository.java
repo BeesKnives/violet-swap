@@ -14,7 +14,7 @@ public interface VarietyRepository extends JpaRepository<Variety, Integer> {
     Variety findByName(String name);
 
     //select all from Variety table where the name contains the searchterm/queryFragment
-    @Query(value = "SELECT y FROM Variety y WHERE name CONTAINS :search", nativeQuery = true)
+    @Query(value = "SELECT * FROM variety WHERE name LIKE :search", nativeQuery = true)
     public List<Variety> searchVarietyByName(@Param("search") String queryFragment);
 
 }
