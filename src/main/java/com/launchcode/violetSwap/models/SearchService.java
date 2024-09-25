@@ -39,54 +39,29 @@ public class SearchService {
     // Then returns the appropriate list (?) how to have it able to return different data types??
     // Will it have to be 3 separate methods + the query constructor method?
 
-    public String makeQueryFromSearch(String tableName, String columnName, String search){
+//    public String makeQueryFromSearch(String tableName, String columnName, String search){
+//        String table = tableName; //pick the table you are creating the query for
+//        if (table==null){ //if no table found, return error msg //todo: set up for receiving error msgs
+//            return "no repository found";
+//        }
+//        List<String> searchTerms = makeSearchTerm(search); //make search term
+//        String query = "SELECT * FROM ".concat(table).concat(" WHERE CONTAINS  "); //start query, including the table you will be searching in
+//        int countdown = searchTerms.size(); //countdown the length of the searchTerms,
+//        for(String searchTerm : searchTerms){
+//            query.concat("(").concat(columnName).concat(", ").concat(searchTerm).concat(")");//for each searchTerm, concat onto query w/ column name and searchTerm
+//
+//            countdown --; //tick down on the countdown
+//            if(countdown != 0){
+//                query.concat(" AND "); //if it's not the end of the list, add an " AND " to the query
+//            }
+//        }
+//        return query;
+//    }
 
-        String table = tableName; //pick the table you are creating the query for
 
-        if (table==null){ //if no table found, return error msg //todo: set up for receiving error msgs
-            return "no repository found";
-        }
-
-
-        List<String> searchTerms = makeSearchTerm(search); //make search term
-
-        String query = "SELECT * FROM ".concat(table).concat(" WHERE CONTAINS  "); //start query, including the table you will be searching in
-
-
-        int countdown = searchTerms.size(); //countdown the length of the searchTerms,
-        for(String searchTerm : searchTerms){
-            query.concat("(").concat(columnName).concat(", ").concat(searchTerm).concat(")");//for each searchTerm, concat onto query w/ column name and searchTerm
-
-            countdown --; //tick down on the countdown
-            if(countdown != 0){
-                query.concat(" AND "); //if it's not the end of the list, add an " AND " to the query
-            }
-
-        }
-        return query;
-    }
 
 
     //_____________________________________________________________________________________________________
-public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: set filteredListings according to the variety id provided
-
-    //todo:write a query to get all listings with the specific id in varietyId?
-
-    if(varietyId==null){
-        filteredListings = listingRepository.findAll();
-        return filteredListings;
-    }
-
-    Variety selectedVariety = varietyRepository.findById(varietyId).orElse(null); //get variety from varietyRepository
-    if(selectedVariety != null){
-        filteredListings.clear();
-        filteredListings.addAll(selectedVariety.getListings()); //have filtered listings be just the ones of this variety
-    }else{ //if selectedVariety is null, show all listings
-        filteredListings = listingRepository.findAll();
-    }
-
-    return filteredListings;
-}
 
 
 
@@ -105,36 +80,73 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
         return fixedString;
     }
     //set up search term into a list (calls removeExtraChars)
-    public List<String> makeSearchTerm (String searchTerm){
-        String editedString = removeExtraChars(searchTerm); //call removeExtraChars
+    public List<String> makeSearchTerm (String searchInput){
+        String editedString = removeExtraChars(searchInput); //call removeExtraChars
         List<String> editedSearchTerm = Arrays.asList(editedString.split(" "));  //convert the search term into a list
+        //todo: remove any empty strings?(just containing "") check if you need to
         return editedSearchTerm;
     }
+
+    public String makeQueryFragmentFromSearch(String searchInput){ //makes query fragment from the searchTerm, calls makeSearchTerm
+        List<String> searchTerms = makeSearchTerm(searchInput); //split searchInput into a list of strings
+        if (searchTerms.size()==1){ //if there's only 1 searchTerm, return it as a string
+            return searchTerms.toString();
+        }
+        String queryFragment = "";
+        int countdown = searchTerms.size(); //countdown the length of the searchTerms,
+        for(String searchTerm : searchTerms){
+
+            queryFragment.concat(searchTerm);//for each searchTerm, concat onto queryFragment w/ searchTerm
+
+            countdown --; //tick down on the countdown
+            if(countdown != 0){
+                queryFragment.concat(" AND CONTAINS "); //if it's not the end of the list, add an " AND CONTAINS " to the query
+            }
+
+        }
+        return queryFragment;
+
+    }
+
+
+//_____________________________________________________________________________________________________
 
 
 
     //search for varieties
     public List<Variety> searchVarieties(String search){
         filteredVarieties.clear();//so no duplicates
-        List<String> searchItems = makeSearchTerm(search); //make search parameter into a list of Strings (searchItems)
+//        List<String> searchItems = makeSearchTerm(search); //make search parameter into a list of Strings (searchItems)
 
-        for(Variety variety : varietyRepository.findAll()){ //For each variety
-            int counter = searchItems.size();
-            String varietyName = removeExtraChars(variety.getName()); //get searchTerm of the variety.
+//        for(Variety variety : varietyRepository.findAll()){ //For each variety
+//            int counter = searchItems.size();
+//            String varietyName = removeExtraChars(variety.getName()); //get searchTerm of the variety.
+//
+//            for(String searchItem : searchItems){ //For each searchItem
+//                if (varietyName.contains(searchItem)){ //check if varietyName contains the searchItem.
+//                    counter --; //if yes, mark it and move to next searchItem
+//                    if (counter == 0){//once counter reaches 0, all search items have been found in varietyName, and that variety can be added to the list.
+//                        filteredVarieties.add(variety);
+//                    }
+//                } else{
+//                    break;
+//                }
+//            }
+//        }
+        String searchFragment = makeQueryFragmentFromSearch(search);
+        filteredVarieties = varietyRepository.searchVarietyByName(searchFragment);
 
-            for(String searchItem : searchItems){ //For each searchItem
-                if (varietyName.contains(searchItem)){ //check if varietyName contains the searchItem.
-                    counter --; //if yes, mark it and move to next searchItem
-                    if (counter == 0){//once counter reaches 0, all search items have been found in varietyName, and that variety can be added to the list.
-                        filteredVarieties.add(variety);
-                    }
-                } else{
-                    break;
-                }
-            }
-        }
         return filteredVarieties;
     }
+
+
+
+
+
+
+
+
+
 
     //search for users
     public List<User> searchUsers(String search){
@@ -161,18 +173,8 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
         return filteredUsers;
     }
 
-//    //search Users by city / state, needs to have
-//    public List<User> filterUsersByLocation(String searchCity, String searchState){
-//        filteredUsers.clear();//so no duplicates
-//        searchCity = searchCity.toUpperCase();
-//        searchState = searchState.toUpperCase();
-//        for(User user : availableUsers){
-//            if(user.getCity().toUpperCase().contains(searchCity) && user.getState().toUpperCase().contains(user.getState())){ //if the search term contains the city and state, add it to filteredLocationUsers
-//                filteredUsers.add(user);
-//            }
-//        }
-//        return filteredUsers;
-//    }
+//todo: search Users by city / state
+
 
 
     //may be moved to controller??:
@@ -211,11 +213,8 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
 
 
         Double userLatitude = user.getLatitude(); //get lat/long of user
-        System.out.println(userLatitude + "_______________________________________________________________");
         Double userLongitude = user.getLongitude();
 
-
-        //get list of users in listings??
 
 
         for ( Listing listing : filteredListings ) { //for each listing in filteredListings
@@ -350,10 +349,29 @@ public List<Listing> setFilteredListingsByVariety(Integer varietyId){ //todo: se
     }
 
 //_____________________________________________________________________________________________________ END SORTING
+//_____________________________________________________________________________________________________ CUSTOM SETTERS
 
-    //controller will pick which search method to call based on inputs selected in the view and pass in the search term
-    //method will return a List<> of listings or users or varieties
 
+
+    public List<Listing> setFilteredListingsByVariety(Integer varietyId){ // set filteredListings according to the variety id provided
+
+        if(varietyId==null){
+            filteredListings = listingRepository.findAll();
+            return filteredListings;
+        }
+
+        Variety selectedVariety = varietyRepository.findById(varietyId).orElse(null); //get variety from varietyRepository
+        if(selectedVariety != null){
+            filteredListings.clear();
+            filteredListings.addAll(selectedVariety.getListings()); //have filtered listings be just the ones of this variety
+        }else{ //if selectedVariety is null, show all listings
+            filteredListings = listingRepository.findAll();
+        }
+
+        return filteredListings;
+    }
+
+//_____________________________________________________________________________________________________ END CUSTOM SETTERS
 
 //_____________________________________________________________________________________________________ Generic GETTERS / SETTERS
 
