@@ -107,7 +107,7 @@ public class SearchService {
 
             countdown --; //tick down on the countdown
             if(countdown != 0){
-                queryFragment = queryFragment.concat(" AND LIKE "); //if it's not the end of the list, add an " AND CONTAINS " to the query
+                queryFragment = queryFragment.concat(" AND "); //if it's not the end of the list, add an " AND " to the query
             }
 
         }
