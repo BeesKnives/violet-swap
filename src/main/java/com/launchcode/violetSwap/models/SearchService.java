@@ -92,18 +92,15 @@ public class SearchService {
         List<String> searchTerms = makeSearchTerm(searchInput); //split searchInput into a list of strings
         String queryFragment = "";
 
-        if (searchTerms.size()==1){ //if there's only 1 searchTerm, return it as a string
-            System.out.println("_____________________________________________01" + searchTerms.toString());
-            queryFragment = queryFragment.concat("'%").concat(searchTerms.get(0)).concat("%'");
-            System.out.println(queryFragment);
-            return queryFragment;
 
-        }
 
         int countdown = searchTerms.size(); //countdown the length of the searchTerms,
         for(String searchTerm : searchTerms){
 
+            //queryFragment = queryFragment.concat("'%").concat(searchTerm).concat("%'");//for each searchTerm, concat onto queryFragment w/ searchTerm
+
             queryFragment = queryFragment.concat("'%").concat(searchTerm).concat("%'");//for each searchTerm, concat onto queryFragment w/ searchTerm
+
 
             countdown --; //tick down on the countdown
             if(countdown != 0){

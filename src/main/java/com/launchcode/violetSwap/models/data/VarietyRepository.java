@@ -24,6 +24,10 @@ public interface VarietyRepository extends JpaRepository<Variety, Integer> {
     @Query(value = "SELECT * FROM variety WHERE name LIKE :search", nativeQuery = true)
     public List<Variety> searchVarietyByName(@Param("search") String queryFragment);
 
+    //todo: try this:
+    // https://stackoverflow.com/questions/66771836/java-hibernate-search-like-query-injection-protection-parameter-binding
+    // https://thorben-janssen.com/jpa-native-queries/
+
 //    @Query(value = "SELECT * FROM variety WHERE name LIKE :search", nativeQuery = true)
 //    public List<Variety> searchVarietyByName();
 
