@@ -142,7 +142,8 @@ public class SearchService {
         System.out.println("_____________________________________________"+"2");
         String queryFragment = makeQueryFragmentFromSearch(search);
         System.out.println("_____________________________________________"+"3");
-        filteredVarieties = varietyRepository.searchVarietyByName(queryFragment);
+        //filteredVarieties = varietyRepository.searchVarietyByName(queryFragment);
+        filteredVarieties= varietyRepository.findByNameIgnoreCaseContaining(search);
         System.out.println("_____________________________________________"+"4");
         System.out.println(filteredVarieties);
         return filteredVarieties;

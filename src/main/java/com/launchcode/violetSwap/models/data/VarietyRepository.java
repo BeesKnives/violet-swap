@@ -27,6 +27,10 @@ public interface VarietyRepository extends JpaRepository<Variety, Integer> {
     //todo: try this:
     // https://stackoverflow.com/questions/66771836/java-hibernate-search-like-query-injection-protection-parameter-binding
     // https://thorben-janssen.com/jpa-native-queries/
+    // OR
+    // get that T-SQL extension and follow the email from Shaw
+
+    List<Variety> findByNameIgnoreCaseContaining(String name);
 
 //    @Query(value = "SELECT * FROM variety WHERE name LIKE :search", nativeQuery = true)
 //    public List<Variety> searchVarietyByName();
