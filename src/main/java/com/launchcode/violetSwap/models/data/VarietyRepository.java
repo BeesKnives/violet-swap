@@ -28,6 +28,8 @@ public interface VarietyRepository extends JpaRepository<Variety, Integer> {
     //    @Query(value = "SELECT * FROM variety WHERE name LIKE :search", nativeQuery = true)
     //    public List<Variety> searchVarietyByName(@Param("search") String queryFragment);
 
+    //todo: see if you can pass in a list as a param- Java jpa query list param
+
     List<Variety> findByNameIgnoreCaseContaining(String name);
 
 //    @Query(value = "SELECT * FROM variety WHERE name LIKE :search", nativeQuery = true)
