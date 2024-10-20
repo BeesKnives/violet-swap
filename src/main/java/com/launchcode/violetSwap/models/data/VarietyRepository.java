@@ -30,6 +30,10 @@ public interface VarietyRepository extends JpaRepository<Variety, Integer> {
 
     //todo: see if you can pass in a list as a param- Java jpa query list param
 
+    //todo: try this:
+    // https://stackoverflow.com/questions/66099686/like-query-in-jpa-using-list-of-string-spring
+    // https://stackoverflow.com/questions/72789753/i-want-to-use-like-operator-with-or-operator-in-jpa-spring-boot
+
     List<Variety> findByNameIgnoreCaseContaining(String name);
 
 //    @Query(value = "SELECT * FROM variety WHERE name LIKE :search", nativeQuery = true)
