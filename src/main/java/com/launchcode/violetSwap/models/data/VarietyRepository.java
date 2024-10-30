@@ -21,7 +21,7 @@ public interface VarietyRepository extends JpaRepository<Variety, Integer> {
 //    @Query(value = "SELECT * FROM variety WHERE name LIKE ?1", nativeQuery = true)
 //    public List<Variety> searchVarietyByName(String queryFragment);
 
-    //todo: for custom querry and sort, set the query instead of the listings? maybe not necccessary tho...
+    //todo: for custom querry and sort, set the query instead of the listings? maybe not necccessary tho....
 
     @Query(value = "SELECT * FROM variety WHERE name LIKE :search", nativeQuery = true)
     public List<Variety> searchVarietyByName(@Param("search") String queryFragment);
