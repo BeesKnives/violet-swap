@@ -72,7 +72,7 @@ public class SearchService {
     //remove extra parts from the search term and capitalize it to make it easier to search with
     public String removeExtraChars(String string){
         String fixedString = string.toUpperCase(); // case insensitive (Uppercase)
-        List<String> removeThese = Arrays.asList( "'", "-", "_", Character.toString('"')); //array [ ', -, _, "]
+        List<String> removeThese = Arrays.asList( "'", "-", "_", Character.toString('"'), "%", ".", ",", "&", "|"); //array [ ', -, _, ", %, ., ,, &, |]
 
         for(String item : removeThese){
             fixedString = fixedString.replaceAll(item,""); // for every item present in removeThese, delete it
